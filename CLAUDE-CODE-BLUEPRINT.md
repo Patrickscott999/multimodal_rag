@@ -43,6 +43,22 @@ ffmpeg -version
 ```
 If ffmpeg is not installed, tell me how to install it for my OS before continuing.
 
+Check if the Supabase CLI is installed:
+```
+supabase --version
+```
+If not installed, install it for the user's OS:
+- **npm:** `npm install -g supabase`
+- **macOS:** `brew install supabase/tap/supabase`
+- **Windows (scoop):** `scoop bucket add supabase https://github.com/supabase/scoop-bucket.git && scoop install supabase`
+- **Linux:** `brew install supabase/tap/supabase`
+
+Then have them log in (opens browser):
+```
+supabase login
+```
+**Wait for login to complete before continuing.**
+
 ---
 
 ### Step 2: Credentials (ASK ME)
@@ -91,7 +107,7 @@ LLM_MODEL = "gemini-3.1-flash-lite-preview"
 
 ### Step 4: Database Migration
 
-Create `migration.sql` with the SQL below. Then **tell me to paste this into my Supabase dashboard SQL Editor and click Run:**
+Create `migration.sql` at the project root with the SQL below.
 
 ```sql
 CREATE EXTENSION IF NOT EXISTS vector WITH SCHEMA public;
@@ -137,7 +153,31 @@ END;
 $$ LANGUAGE plpgsql;
 ```
 
-**Wait for me to confirm the migration is applied before continuing.**
+Now apply the migration using the Supabase CLI. Initialize, set up the migration, link, and push:
+
+```
+supabase init
+```
+
+Copy the migration into the Supabase migrations directory:
+```
+mkdir -p supabase/migrations
+cp migration.sql supabase/migrations/20250101000000_init.sql
+```
+
+Extract the project ref from the SUPABASE_URL (it's the subdomain — e.g. `https://abcxyz.supabase.co` → `abcxyz`) and link:
+```
+supabase link --project-ref <project-ref>
+```
+
+Push the migration to the remote database:
+```
+supabase db push
+```
+
+If `db push` asks for a database password, tell the user to find it in Supabase Dashboard → Settings → Database. They set this password when they created their project.
+
+**Wait for the migration to succeed before continuing.**
 
 ---
 
@@ -744,7 +784,7 @@ if __name__ == "__main__":
 
 ### Step 9: Launch & Test
 
-1. **Tell me to go paste the migration SQL into my Supabase SQL Editor** (if not done already)
+1. **Confirm the migration was applied successfully** (if not done already)
 2. Run `python app.py` to start the Gradio UI
 3. Tell me to open http://localhost:7860
 4. Tell me to go to the "Upload & Ingest" tab and upload my files:
