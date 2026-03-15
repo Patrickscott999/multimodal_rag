@@ -11,7 +11,7 @@ from config import (
     EMBEDDING_MODEL, EMBEDDING_DIM, LLM_MODEL,
 )
 
-gemini = genai.Client(api_key=GEMINI_API_KEY)
+gemini   = genai.Client(api_key=GEMINI_API_KEY)
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 
@@ -86,12 +86,12 @@ def insert_document(
     metadata: dict | None = None,
 ):
     supabase.table("documents").insert({
-        "content": content,
-        "embedding": embedding,
+        "content":     content,
+        "embedding":   embedding,
         "source_type": source_type,
         "source_file": source_file,
         "chunk_index": chunk_index,
-        "metadata": metadata or {},
+        "metadata":    metadata or {},
     }).execute()
 
 

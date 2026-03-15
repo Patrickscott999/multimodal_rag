@@ -5,3 +5,6 @@ gradio
 opencv-python
 Pillow
 numpy
+fastapi
+uvicorn[standard]
+python-multipart

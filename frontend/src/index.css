@@ -1,0 +1,176 @@
+/* ── Design tokens ──────────────────────────────────────────────── */
+:root {
+  /* Obsidian palette */
+  --aurora-dark:   #04040a;
+  --aurora-navy:   #06060f;
+  --aurora-teal:   #0d9488;
+  --aurora-cyan:   #00e5ff;
+  --aurora-blue:   #3b82f6;
+  --aurora-indigo: #6366f1;
+
+  /* Cyber accents */
+  --cyber-cyan:   #00e5ff;
+  --cyber-purple: #8b5cf6;
+
+  /* Glass — darker, more obsidian */
+  --glass-bg:     rgba(5, 5, 12, 0.88);
+  --glass-border: rgba(255, 255, 255, 0.07);
+  --glass-blur:   24px;
+
+  --font-display: 'Cormorant Garamond', serif;
+  --font-mono:    'JetBrains Mono', monospace;
+  --font-body:    system-ui, -apple-system, sans-serif;
+}
+
+/* ── Reset & base ───────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  background: var(--aurora-dark);
+  color: #e2e8f0;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  height: 100%;
+}
+
+/* ── Structural grid overlay ─────────────────────────────────────── */
+/* Sits between the aurora (z:0) and app content (z:10) */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+  background-size: 56px 56px;
+  /* Fades out toward all edges — visible in center, invisible at margins */
+  mask-image: radial-gradient(
+    ellipse 78% 65% at 50% 42%,
+    rgba(0,0,0,0.85) 0%,
+    rgba(0,0,0,0.4) 55%,
+    transparent 85%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 78% 65% at 50% 42%,
+    rgba(0,0,0,0.85) 0%,
+    rgba(0,0,0,0.4) 55%,
+    transparent 85%
+  );
+}
+
+/* ── Glass morphism ─────────────────────────────────────────────── */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+}
+
+/* ── Reveal animation ───────────────────────────────────────────── */
+@keyframes revealUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  animation: revealUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ── Silver metallic title ──────────────────────────────────────── */
+.silver-gradient {
+  background: linear-gradient(
+    135deg,
+    #6a6a82 0%,
+    #b8b8cc 15%,
+    #e8e8f8 30%,
+    #ffffff 42%,
+    #dcdcec 54%,
+    #a8a8bc 68%,
+    #d0d0e0 82%,
+    #7a7a8e 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Site title block ───────────────────────────────────────────── */
+.site-title__tag {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.26em;
+  color: rgba(0, 229, 255, 0.45);
+  text-transform: lowercase;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+/* Fixed-height canvas host — gives VaporizeText something to measure */
+.site-title__canvas-wrap {
+  width: 100%;
+  height: 160px;
+  flex-shrink: 0;
+}
+
+.site-title__rule {
+  width: 48px;
+  height: 1px;
+  margin: 0 auto 0;
+  background: linear-gradient(90deg, transparent, rgba(0,229,255,0.4), transparent);
+}
+
+/* ── Glow text (fallback / accent) ─────────────────────────────── */
+.glow-text {
+  text-shadow:
+    0 0 24px rgba(0, 229, 255, 0.18),
+    0 0 64px rgba(0, 229, 255, 0.08);
+}
+
+/* ── Scroll layer (sits above fixed canvas + grid) ──────────────── */
+.app-scroll-layer {
+  position: relative;
+  z-index: 10;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Scrollbar styling ──────────────────────────────────────────── */
+.messages-area::-webkit-scrollbar       { width: 3px; }
+.messages-area::-webkit-scrollbar-track { background: transparent; }
+.messages-area::-webkit-scrollbar-thumb {
+  background: rgba(0, 229, 255, 0.18);
+  border-radius: 2px;
+}
+
+/* ── Utility ────────────────────────────────────────────────────── */
+.mono { font-family: var(--font-mono); }
+
+.cyber-subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  color: rgba(255, 255, 255, 0.2);
+  text-transform: uppercase;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
